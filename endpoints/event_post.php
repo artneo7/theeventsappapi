@@ -7,8 +7,10 @@ function api_event_post($request) {
     return rest_ensure_response($response);
   }
 
+  $event_type = sanitize_text_field($request['type']);
   $event_title = sanitize_text_field($request['title']);
-  // $event_date = sanitize_text_field($request['date']);
+  $event_date = sanitize_text_field($request['date']);
+  $event_description = sanitize_text_field($request['description']);
 
   if (empty($event_title)) {
     $response = new WP_Error('error', 'Missing data', ['status' => 422]);
@@ -20,11 +22,12 @@ function api_event_post($request) {
     'post_type' => 'post',
     'post_status' => 'publish',
     'post_title' => $event_title,
-    'post_content' => $event_title,
+    'post_content' => $event_description,
     // 'files' => $files,
-    // 'meta_input' => [
-    //   'date' => $event_date
-    // ]
+    'meta_input' => [
+      'date' => $event_date,
+      'category' => $event_type
+    ]
   ];
 
   $post_id = wp_insert_post($response);
