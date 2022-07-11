@@ -11,8 +11,9 @@ function api_event_post($request) {
   $event_title = sanitize_text_field($request['title']);
   $event_date = sanitize_text_field($request['date']);
   $event_description = sanitize_text_field($request['description']);
+  $event_files = $request->get_file_params();
 
-  if (empty($event_title)) {
+  if (empty($event_title) || empty($event_date)) {
     $response = new WP_Error('error', 'Missing data', ['status' => 422]);
     return rest_ensure_response($response);
   }
@@ -23,7 +24,7 @@ function api_event_post($request) {
     'post_status' => 'publish',
     'post_title' => $event_title,
     'post_content' => $event_description,
-    // 'files' => $files,
+    'files' => $event_files,
     'meta_input' => [
       'date' => $event_date,
       'category' => $event_type
@@ -31,6 +32,13 @@ function api_event_post($request) {
   ];
 
   $post_id = wp_insert_post($response);
+
+  require_once ABSPATH . 'wp-admin/includes/image.php';
+  require_once ABSPATH . 'wp-admin/includes/file.php';
+  require_once ABSPATH . 'wp-admin/includes/media.php';
+
+  $photo_id = media_handle_upload('img', $post_id);
+  update_post_meta($post_id, 'img', $photo_id);
 
   return rest_ensure_response($response);
 }
