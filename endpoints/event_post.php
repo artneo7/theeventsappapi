@@ -18,16 +18,25 @@ function api_event_post($request) {
     return rest_ensure_response($response);
   }
 
+  // Check if category already exists
+  $cat_id = get_cat_ID($event_type);
+
+  // if doesn't exist, create a new one
+  if ($cat_id === 0) {
+    $new_cat = wp_insert_term($event_type, "category");
+    $cat_id = $new_cat['term_id'];
+  }
+
   $response = [
     'post_author' => $user->ID,
     'post_type' => 'post',
     'post_status' => 'publish',
     'post_title' => $event_title,
     'post_content' => $event_description,
+    'post_category' => [$cat_id],
     'files' => $event_files,
     'meta_input' => [
-      'date' => $event_date,
-      'category' => $event_type
+      'date' => $event_date
     ]
   ];
 
