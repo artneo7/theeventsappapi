@@ -24,7 +24,7 @@ function api_events_get($request) {
     return rest_ensure_response($response);
   }
 
-  $_total = sanitize_text_field($request['_total']) ?: 3;
+  $_total = sanitize_text_field($request['_total']) ?: -1;
   $_page = sanitize_text_field($request['_page']) ?: 1;
   
   // If events list is public

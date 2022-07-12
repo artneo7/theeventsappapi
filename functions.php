@@ -12,6 +12,8 @@ require_once $dirbase . '/endpoints/user_post.php';
 require_once $dirbase . '/endpoints/user_get.php';
 
 require_once $dirbase . '/endpoints/event_post.php';
+require_once $dirbase . '/endpoints/event_delete.php';
+
 require_once $dirbase . '/endpoints/events_get.php';
 
 function change_api() {
