@@ -16,22 +16,29 @@ function event_data($post) {
 }
 
 function api_events_get($request) {
-  $_user = sanitize_text_field($request['_user']);
+  $user_id = wp_get_current_user()->ID;
+  if ($user_id === 0) {
+    $response = new WP_Error('error', "User doesn't have permission", ['status' => 401]);
+    return rest_ensure_response($response);
+  }
+
   $_total = sanitize_text_field($request['_total']) ?: 3;
   $_page = sanitize_text_field($request['_page']) ?: 1;
-
-  if (!is_numeric($_user)) {
-    $user = get_user_by('login', $_user);
-    if (!$user) {
-      $response = new WP_Error('error', 'User not found.', ['status' => 404]);
-      return rest_ensure_response($response);
-    }
-    $_user = $user->ID;
-  }
+  
+  // If events list is public
+  // $_user = sanitize_text_field($request['_user']);
+  // if (!is_numeric($_user)) {
+  //   $user = get_user_by('login', $_user);
+  //   if (!$user) {
+  //     $response = new WP_Error('error', 'User not found.', ['status' => 404]);
+  //     return rest_ensure_response($response);
+  //   }
+  //   $_user = $user->ID;
+  // }
 
   $args = [
     'post_type' => 'post',
-    'author' => $_user,
+    'author' => $user_id,
     'posts_per_page' => $_total,
     'paged' => $_page
   ];
