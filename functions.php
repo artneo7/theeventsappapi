@@ -10,8 +10,9 @@ add_filter('rest_endpoints', function ($endpoints) {
 $dirbase = get_template_directory();
 require_once $dirbase . '/endpoints/user_post.php';
 require_once $dirbase . '/endpoints/user_get.php';
+
 require_once $dirbase . '/endpoints/event_post.php';
-require_once $dirbase . '/endpoints/event_get.php';
+require_once $dirbase . '/endpoints/events_get.php';
 
 function change_api() {
   return 'json';
@@ -40,7 +41,7 @@ function artneo_image_sizes() {
 add_action('after_setup_theme', 'artneo_image_sizes');
 
 // Resize original uploaded image
-function replace_uploaded_image($image_data) 
+function replace_uploaded_image($image_data)
 {
 	// if there is no large image : return
 	if ( !isset($image_data['sizes']['main']) ) 
