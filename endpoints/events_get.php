@@ -4,10 +4,12 @@ function event_data($post) {
   $img = wp_get_attachment_image_src($post_meta['img'][0], 'main')[0];
   $date = $post_meta['date'];
   $user = get_userdata($post->post_author);
+  $category = get_the_category($post->ID)[0]->name;
 
   return [
     'id' => $post->ID,
     'author' => $user->user_login,
+    'category' => $category,
     'title' => $post->post_title,
     'description' => $post->post_content,
     'date' => $date[0],
