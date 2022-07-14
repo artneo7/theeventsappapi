@@ -2,7 +2,7 @@
 function api_event_post($request) {
   $user = wp_get_current_user();
 
-  if ($user->ID === 0) {
+  if ($user->data->ID === 0) {
     $response = new WP_Error("error", "User doesn't have permission", ['status' => 401]);
     return rest_ensure_response($response);
   }
