@@ -49,6 +49,9 @@ function api_event_post($request) {
   $photo_id = media_handle_upload('img', $post_id);
   update_post_meta($post_id, 'img', $photo_id);
 
+  // Add new post ID to response
+  $response['id'] = $post_id;
+
   return rest_ensure_response($response);
 }
 
