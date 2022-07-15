@@ -52,6 +52,12 @@ function api_event_post($request) {
   // Add new post ID to response
   $response['id'] = $post_id;
 
+  // Add category name to response
+  $response['category'] = get_cat_name($cat_id);
+
+  // Add image to response
+  $response['img'] = wp_get_attachment_image_src($photo_id, 'main')[0];
+
   return rest_ensure_response($response);
 }
 
