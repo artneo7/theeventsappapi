@@ -1,4 +1,5 @@
 <?php
+
 // Remove access to /json/wp/v2/users
 add_filter('rest_endpoints', function ($endpoints) {
   unset($endpoints['/wp/v2/users']);
@@ -69,3 +70,6 @@ function replace_uploaded_image($image_data)
 	return $image_data;
 }
 add_filter('wp_generate_attachment_metadata','replace_uploaded_image');
+
+// Unset WordPress default cookies
+unset($_COOKIE['wp-settings-time-1']);
